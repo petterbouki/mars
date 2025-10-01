@@ -16,6 +16,14 @@ function App() {
   const [showParrain, setShowParrain] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // ✅ Préchargement des images
+  useEffect(() => {
+    [...parrains, ...fioles].forEach((person) => {
+      const img = new Image();
+      img.src = person.image;
+    });
+  }, []);
+
   // Initialisation
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -57,13 +65,12 @@ function App() {
       return;
     }
 
-    // Met à jour le compteur
     const t = setTimeout(() => setCounter((c) => c - 1), 1000);
 
-    // Défilement rapide des images
+    // ✅ Défilement légèrement plus lent (200ms)
     const scrollInterval = setInterval(() => {
       setCurrentImageIndex((i) => (i + 1) % remainingParrains.length);
-    }, 100); // change d'image toutes les 100ms
+    }, 200);
 
     return () => {
       clearTimeout(t);
@@ -92,14 +99,12 @@ function App() {
     setShowParrain(false);
     setCounter(8);
 
-    // Tirer un filleul
     let fiolesAvailable = [...remainingFioles];
     fiolesAvailable = resetRemainingIfEmpty(fiolesAvailable, fioles);
     const filleul = fiolesAvailable.shift();
     setCurrentFilleul(filleul);
     setRemainingFioles(fiolesAvailable);
 
-    // Préparer le parrain
     let parrainsAvailable = [...remainingParrains];
     parrainsAvailable = resetRemainingIfEmpty(parrainsAvailable, parrains);
     const parrain = parrainsAvailable.shift();
@@ -119,121 +124,119 @@ function App() {
     localStorage.removeItem(STORAGE_KEY);
   };
 
-  // ... reste du code inchangé
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Tirage Parrains & Filleuls</h1>
+        <p>
+          Égalité, transparence et fun — chaque parrain et filleul tirés sans
+          répétition jusqu'à épuisement
+        </p>
+      </header>
 
-return (
-  <div className="App">
-    <header className="App-header">
-      <h1>Tirage Parrains & Filleuls</h1>
-      <p>
-        Égalité, transparence et fun — chaque parrain et filleul tirés sans
-        répétition jusqu'à épuisement
-      </p>
-    </header>
-
-    <main className="main-content">
-      {remainingFioles.length === 0 && remainingParrains.length === 0 ? (
-        // Message de fin
-        <div className="end-message">
-          <h2>🎉 Tous les filleuls et parrains ont été attribués !</h2>
-          <p>Merci à tous pour votre participation ! 🙏</p>
-        </div>
-      ) : (
-        <div className="characters-container">
-          {/* Filleul */}
-          <div className="character-card">
-            <h3 className="text-center">FILLEUL ou FILLEULE</h3>
-
-            {currentFilleul ? (
-              <>
-                <div className="image-container">
-                  <img
-                    src={currentFilleul.image}
-                    alt={`${currentFilleul.nom} ${currentFilleul.prenom}`}
-                    className="character-image"
-                  />
-                </div>
-                <div className="character-info">
-                  <h3>
-                    {currentFilleul.prenom} {currentFilleul.nom}
-                  </h3>
-                  <p>Numéro : {currentFilleul.numero}</p>
-                  <p>ID : {currentFilleul.id}</p>
-                </div>
-              </>
-            ) : (
-              <div className="placeholder">
-                Aucun(e) filleul(e) sélectionné(e)
-              </div>
-            )}
+      <main className="main-content">
+        {remainingFioles.length === 0 && remainingParrains.length === 0 ? (
+          <div className="end-message">
+            <h2>🎉 Tous les filleuls et parrains ont été attribués !</h2>
+            <p>Merci à tous pour votre participation ! 🙏</p>
           </div>
+        ) : (
+          <div className="characters-container">
+            {/* Filleul */}
+            <div className="character-card">
+              <h3 className="text-center">FILLEUL ou FILLEULE</h3>
+              {currentFilleul ? (
+                <>
+                  <div className="image-container">
+                    <img
+                      src={currentFilleul.image}
+                      alt={`${currentFilleul.nom} ${currentFilleul.prenom}`}
+                      className="character-image"
+                      loading="lazy"   // ✅ Lazy loading
+                    />
+                  </div>
+                  <div className="character-info">
+                    <h3>
+                      {currentFilleul.prenom} {currentFilleul.nom}
+                    </h3>
+                    <p>Numéro : {currentFilleul.numero}</p>
+                    <p>ID : {currentFilleul.id}</p>
+                  </div>
+                </>
+              ) : (
+                <div className="placeholder">
+                  Aucun(e) filleul(e) sélectionné(e)
+                </div>
+              )}
+            </div>
 
-          {/* Parrain */}
-          <div className="character-card">
-            <h3 className="text-center">PARRAIN ou MARRAINE</h3>
-
-            {showParrain && currentParrain ? (
-              <>
+            {/* Parrain */}
+            <div className="character-card">
+              <h3 className="text-center">PARRAIN ou MARRAINE</h3>
+              {showParrain && currentParrain ? (
+                <>
+                  <div className="image-container">
+                    <img
+                      src={currentParrain.image}
+                      alt={currentParrain.nom}
+                      className="character-image"
+                      loading="lazy"   // ✅ Lazy loading
+                    />
+                  </div>
+                  <div className="character-info">
+                    <h3>
+                      {currentParrain.prenom} {currentParrain.nom}
+                    </h3>
+                    <p>Numéro : {currentParrain.numero}</p>
+                    <p>ID : {currentParrain.id}</p>
+                  </div>
+                </>
+              ) : (
                 <div className="image-container">
-                  <img
-                    src={currentParrain.image}
-                    alt={currentParrain.nom}
-                    className="character-image"
-                  />
+                  {loading && remainingParrains.length > 0 ? (
+                    <img
+                      src={remainingParrains[currentImageIndex].image}
+                      alt="Défilement parrains"
+                      className="character-image scrolling-image"
+                      loading="lazy"   // ✅ Lazy loading
+                    />
+                  ) : (
+                    <p>Appuyez sur "Nouveau tirage" pour commencer</p>
+                  )}
                 </div>
-                <div className="character-info">
-                  <h3>
-                    {currentParrain.prenom} {currentParrain.nom}
-                  </h3>
-                  <p>Numéro : {currentParrain.numero}</p>
-                  <p>ID : {currentParrain.id}</p>
-                </div>
-              </>
-            ) : (
-              <div className="image-container">
-                {loading && remainingParrains.length > 0 ? (
-                  <img
-                    src={remainingParrains[currentImageIndex].image}
-                    alt="Défilement parrains"
-                    className="character-image scrolling-image"
-                  />
-                ) : (
-                  <p>Appuyez sur "Nouveau tirage" pour commencer</p>
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
+        )}
+
+        {/* Boutons */}
+        <div className="controls">
+          <button
+            className="tirage-button"
+            onClick={tirage}
+            disabled={loading || remainingFioles.length === 0}
+          >
+            {loading
+              ? `Tirage en cours (${counter}s)`
+              : remainingFioles.length === 0
+              ? "Tirage terminé"
+              : "Nouveau tirage"}
+          </button>
+          <button className="reset-button" onClick={forceResetAll}>
+            Réinitialiser
+          </button>
         </div>
-      )}
 
-      {/* Boutons */}
-      <div className="controls">
-        <button
-          className="tirage-button"
-          onClick={tirage}
-          disabled={loading || remainingFioles.length === 0}
-        >
-          {loading
-            ? `Tirage en cours (${counter}s)`
-            : remainingFioles.length === 0
-            ? "Tirage terminé"
-            : "Nouveau tirage"}
-        </button>
-        <button className="reset-button" onClick={forceResetAll}>
-          Réinitialiser
-        </button>
-      </div>
-
-      <footer style={{ marginTop: 20 }}>
-        <small>
-          Restants — Parrains: {remainingParrains.length} | Filleuls:{" "}
-          {remainingFioles.length}
-        </small>
-      </footer>
-    </main>
-  </div>
-);
-
+        <footer style={{ marginTop: 20 }}>
+          <small>
+            Restants — Parrains: {remainingParrains.length} | Filleuls:{" "}
+            {remainingFioles.length}
+          </small>
+        </footer>
+      </main>
+    </div>
+  );
 }
 
 export default App;
+
