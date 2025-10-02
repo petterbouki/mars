@@ -97,7 +97,7 @@ function App() {
   const tirage = () => {
     setLoading(true);
     setShowParrain(false);
-    setCounter(8);
+    setCounter(5);
 
     let fiolesAvailable = [...remainingFioles];
     fiolesAvailable = resetRemainingIfEmpty(fiolesAvailable, fioles);
