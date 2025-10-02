@@ -7,7 +7,7 @@ const fioles = [
     nom: "Abdoul-moctar",
     prenom: "Hamidou",
     numero: "0708370494",
-    image: "/images/fioles/ABDoul_moctar_Hamidou.jpg",
+    image: "/images/fioles/Abdoul-moctar_Hamidou.jpg",
   },
   {
     id: "F002",
