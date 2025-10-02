@@ -40,7 +40,7 @@ const parrains = [
   { id: "P036", nom: "Silue Tiekoumou", prenom: "Jacqueline", numero: "0586550071", image: "/images/parrains/SILUE_TIEKOUMOU_JACQUELINE.jpg" },
   { id: "P037", nom: "Sotti Yokolie", prenom: "Jean Marc", numero: "0741161880", image: "/images/parrains/SOTTI_YOKOLIE_JEAN_MARC.jpg" },
   { id: "P038", nom: "Traore GnimitAurele", prenom: "Aime", numero: "0768980688", image: "/images/parrains/TRAORE_GNIMITA_AURELE_AIME.jpg" },
-  { id: "P039", nom: "Yao Amani", prenom: "Patrick Stephane", numero: "0758948420", image: "/images/parrains/YAO_AMANI_PATRICK_STEPHANNE.jpg" },
+  { id: "P039", nom: "Yao Amani", prenom: "Patrick Stephane", numero: "0758948420", image: "/images/parrains/YAO_AMANI_PATRICK_STEPHANE.jpg" },
   { id: "P040", nom: "Yero", prenom: "Sarr", numero: "+221784765221", image: "/images/parrains/YERO_SARR.jpg" },
 ];
 

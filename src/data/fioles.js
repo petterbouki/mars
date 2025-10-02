@@ -238,7 +238,7 @@ const fioles = [
     nom: "Traore",
     prenom: "Ninnin Sira Yasmine Anna-maria",
     numero: "0777926098",
-    image: "/images/fioles/Traore_Ninnin_Sira_Yasmine_Anna_maria.jpg",
+    image: "/images/fioles/Traore_Ninnin_Sira_Yasmine_Anna-maria.jpg",
   },
   {
     id: "F035",
